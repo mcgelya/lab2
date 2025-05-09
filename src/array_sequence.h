@@ -42,6 +42,12 @@ public:
         capacity = a.GetSize();
     }
 
+    ArraySequence(const ArraySequence<T>* a) {
+        data = new DynamicArray<T>(*a->data);
+        size = a->size;
+        capacity = a->capacity;
+    }
+
     ArraySequence() {
         data = new DynamicArray<T>(1);
     }
@@ -108,7 +114,7 @@ public:
     }
 
     ArraySequence<T>* Clone() override {
-        ArraySequence<T>* res = new ArraySequence<T>(*data);
+        ArraySequence<T>* res = new ArraySequence<T>(this);
         return res;
     }
 
@@ -154,7 +160,7 @@ class ImmutableArraySequence : public ArraySequence<T> {
     using ArraySequence<T>::ArraySequence;
 
     ArraySequence<T>* Clone() override {
-        ArraySequence<T>* res = new ImmutableArraySequence<T>(*this->data);
+        ArraySequence<T>* res = new ImmutableArraySequence<T>(this);
         return res;
     }
 

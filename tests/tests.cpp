@@ -38,6 +38,11 @@ TEST_CASE("ImmutableArraySequence append") {
     REQUIRE(a->GetLength() == 4);
     REQUIRE(a1->GetLength() == 5);
     REQUIRE(a1->GetLast() == 1);
+    ArraySequence<int>* a2 = a1->Append(0);
+    REQUIRE(a1->GetLength() == 5);
+    REQUIRE(a1->GetLast() == 1);
+    REQUIRE(a2->GetLength() == 6);
+    REQUIRE(a2->GetLast() == 0);
 }
 
 TEST_CASE("ListSequence Prepend") {
@@ -55,6 +60,29 @@ TEST_CASE("ImmutableListSequenc Prepend") {
     REQUIRE(l->GetLength() == 4);
     REQUIRE(l1->GetLength() == 5);
     REQUIRE(l1->GetFirst() == 0);
+}
+
+TEST_CASE("ArraySequence Prepend") {
+    ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
+    a->Prepend(-1);
+    a->Prepend(0);
+    REQUIRE(a->GetLength() == 6);
+    REQUIRE(a->Get(0) == 0);
+    REQUIRE(a->Get(1) == -1);
+    REQUIRE(a->GetCapacity() == 8);
+}
+
+TEST_CASE("ImmutableArraySequence Prepend") {
+    ArraySequence<int>* a = new ImmutableArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
+    ArraySequence<int>* a1 = a->Prepend(1);
+    REQUIRE(a->GetLength() == 4);
+    REQUIRE(a1->GetLength() == 5);
+    REQUIRE(a1->GetFirst() == 1);
+    ArraySequence<int>* a2 = a1->Prepend(0);
+    REQUIRE(a1->GetLength() == 5);
+    REQUIRE(a1->GetFirst() == 1);
+    REQUIRE(a2->GetLength() == 6);
+    REQUIRE(a2->GetFirst() == 0);
 }
 
 TEST_CASE("ListSequence concat") {
