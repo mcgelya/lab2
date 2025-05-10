@@ -1,7 +1,6 @@
 #pragma once
 
 #include "error.h"
-// #include "ienum.h"
 #include <cassert>
 
 template <class T>

@@ -103,16 +103,16 @@ TEST_CASE("ListSequence concat") {
 }
 
 TEST_CASE("ArraySequence concat") {
-    ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
-    ArraySequence<int>* b = new ArraySequence<int>(new int[]{5, 6, 7, 8}, 4);
+    ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3}, 3);
+    ArraySequence<int>* b = new ArraySequence<int>(new int[]{4, 5, 6}, 3);
     a->Concat(b);
-    REQUIRE(a->GetLength() == 8);
-    for (int i = 0; i < 8; ++i) {
-        REQUIRE(a->Get(i) == i + 1);
+    REQUIRE(a->GetLength() == 6);
+    for (int i = 0; i < 6; ++i) {
+        REQUIRE(a->Get(i) == 1 + i);
     }
-    REQUIRE(b->GetLength() == 4);
-    for (int i = 0; i < 4; ++i) {
-        REQUIRE(b->Get(i) == 5 + i);
+    REQUIRE(b->GetLength() == 3);
+    for (int i = 0; i < 3; ++i) {
+        REQUIRE(b->Get(i) == 4 + i);
     }
 }
 

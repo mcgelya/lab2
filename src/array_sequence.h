@@ -87,7 +87,7 @@ public:
         return size;
     }
 
-    int GetCapacity() const {  // for tests
+    int GetCapacity() const {
         return capacity;
     }
 
@@ -123,7 +123,7 @@ public:
     }
 
     IEnumerator<T, ArraySequenceIterator<T>> end() override {
-        return ArraySequenceIterator<T>(data->GetEnd());
+        return ArraySequenceIterator<T>(data->GetBegin() + size);
     }
 
 protected:
@@ -142,6 +142,7 @@ protected:
     }
 
     void Insert(const T& item, int index) {
+        assert(size <= capacity);
         if (size == capacity) {
             data->Resize(capacity * 2);
             capacity *= 2;
