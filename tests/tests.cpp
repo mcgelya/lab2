@@ -16,6 +16,7 @@ TEST_CASE("ImmutableListSequence append") {
     REQUIRE(l->GetLength() == 4);
     REQUIRE(l1->GetLength() == 5);
     REQUIRE(l1->GetLast() == 1);
+
     ListSequence<int>* l2 = l1->Append(0);
     REQUIRE(l1->GetLength() == 5);
     REQUIRE(l1->GetLast() == 1);
@@ -38,6 +39,7 @@ TEST_CASE("ImmutableArraySequence append") {
     REQUIRE(a->GetLength() == 4);
     REQUIRE(a1->GetLength() == 5);
     REQUIRE(a1->GetLast() == 1);
+
     ArraySequence<int>* a2 = a1->Append(0);
     REQUIRE(a1->GetLength() == 5);
     REQUIRE(a1->GetLast() == 1);
@@ -78,6 +80,7 @@ TEST_CASE("ImmutableArraySequence Prepend") {
     REQUIRE(a->GetLength() == 4);
     REQUIRE(a1->GetLength() == 5);
     REQUIRE(a1->GetFirst() == 1);
+
     ArraySequence<int>* a2 = a1->Prepend(0);
     REQUIRE(a1->GetLength() == 5);
     REQUIRE(a1->GetFirst() == 1);
@@ -88,6 +91,20 @@ TEST_CASE("ImmutableArraySequence Prepend") {
 TEST_CASE("ListSequence concat") {
     ListSequence<int>* a = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
     ListSequence<int>* b = new ListSequence<int>(new int[]{5, 6, 7, 8}, 4);
+    a->Concat(b);
+    REQUIRE(a->GetLength() == 8);
+    for (int i = 0; i < 8; ++i) {
+        REQUIRE(a->Get(i) == i + 1);
+    }
+    REQUIRE(b->GetLength() == 4);
+    for (int i = 0; i < 4; ++i) {
+        REQUIRE(b->Get(i) == 5 + i);
+    }
+}
+
+TEST_CASE("ArraySequence concat") {
+    ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
+    ArraySequence<int>* b = new ArraySequence<int>(new int[]{5, 6, 7, 8}, 4);
     a->Concat(b);
     REQUIRE(a->GetLength() == 8);
     for (int i = 0; i < 8; ++i) {
@@ -123,8 +140,14 @@ TEST_CASE("ArraySequence enumerable") {
     }
 }
 
-TEST_CASE("Index out of range") {
+TEST_CASE("ArraySequence: Index out of range") {
     ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
+    REQUIRE_THROWS(a->Get(4));
+    REQUIRE_THROWS(a->Get(-1));
+}
+
+TEST_CASE("ListSequence: Index out of range") {
+    ListSequence<int>* a = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
     REQUIRE_THROWS(a->Get(4));
     REQUIRE_THROWS(a->Get(-1));
 }
