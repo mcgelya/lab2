@@ -18,6 +18,10 @@ public:
         return it->value;
     }
 
+    const T& ConstDereference() const {
+        return it->value;
+    }
+
     void MoveNext() {
         it = it->next;
     }
@@ -94,6 +98,14 @@ public:
     }
 
     IEnumerator<T, ListSequenceIterator<T>> end() override {
+        return ListSequenceIterator<T>(nullptr);
+    }
+
+    IEnumeratorConst<T, ListSequenceIterator<T>> begin() const override {
+        return ListSequenceIterator<T>(data->GetBegin());
+    }
+
+    IEnumeratorConst<T, ListSequenceIterator<T>> end() const override {
         return ListSequenceIterator<T>(nullptr);
     }
 

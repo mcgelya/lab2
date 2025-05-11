@@ -2,6 +2,8 @@
 #include "../src/list_sequence.h"
 #include "../src/array_sequence.h"
 
+#include <iostream>
+
 TEST_CASE("ListSequence append") {
     ListSequence<int>* l = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
     l->Append(1);
@@ -122,10 +124,16 @@ TEST_CASE("ListSequence enumerable") {
         ++i;
     }
     int j = 2;
-    for (int i : *a) {
+    for (const int& i : *a) {
         REQUIRE(i == j);
         ++j;
     }
+    // compiling
+    const ListSequence<int>* b = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
+    for (const int& i : *b) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
 }
 
 TEST_CASE("ArraySequence enumerable") {
@@ -134,10 +142,16 @@ TEST_CASE("ArraySequence enumerable") {
         ++i;
     }
     int j = 2;
-    for (int i : *a) {
+    for (const int& i : *a) {
         REQUIRE(i == j);
         ++j;
     }
+    // compiling
+    const ListSequence<int>* b = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
+    for (const int& i : *b) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
 }
 
 TEST_CASE("ArraySequence: Index out of range") {

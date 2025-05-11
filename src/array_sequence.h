@@ -19,6 +19,10 @@ public:
         return *it;
     }
 
+    const T& ConstDereference() const {
+        return *it;
+    }
+
     void MoveNext() {
         ++it;
     }
@@ -123,6 +127,14 @@ public:
     }
 
     IEnumerator<T, ArraySequenceIterator<T>> end() override {
+        return ArraySequenceIterator<T>(data->GetBegin() + size);
+    }
+
+    IEnumeratorConst<T, ArraySequenceIterator<T>> begin() const override {
+        return ArraySequenceIterator<T>(data->GetBegin());
+    }
+
+    IEnumeratorConst<T, ArraySequenceIterator<T>> end() const override {
         return ArraySequenceIterator<T>(data->GetBegin() + size);
     }
 
