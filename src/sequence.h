@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include "ienum.h"
 #include "error.h"
 
@@ -31,5 +32,19 @@ public:
             instance->Append(item);
         }
         return instance;
+    }
+
+    friend std::ostream& operator<<(std::ostream& os, const Sequence<T, I>& v) {
+        os << "{";
+        int ind = 0;
+        for (const T& x : v) {
+            os << x;
+            if (ind + 1 < v.GetLength()) {
+                os << ", ";
+            }
+            ++ind;
+        }
+        os << "}";
+        return os;
     }
 };

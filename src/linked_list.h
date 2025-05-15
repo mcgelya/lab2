@@ -29,15 +29,6 @@ public:
         }
     }
 
-    ~LinkedList() {
-        ListNode<T>* cur = first;
-        for (int i = 0; i < size; ++i) {
-            ListNode<T>* next = cur->next;
-            delete cur;
-            cur = next;
-        }
-    }
-
     LinkedList() {
     }
 

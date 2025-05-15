@@ -1,4 +1,6 @@
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=undefined,address")
 
-add_executable(main main.cpp)
+set(CMAKE_AUTOMOC ON)
+
+add_executable(main main.cpp column.cpp visualize.cpp)
 target_link_libraries(main Qt6::Widgets)

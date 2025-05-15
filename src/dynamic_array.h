@@ -15,10 +15,6 @@ public:
     DynamicArray() {
     }
 
-    ~DynamicArray() {
-        delete[] data;
-    }
-
     DynamicArray(int size) : size(size) {
         if (size != 0) {
             data = new T[size]();

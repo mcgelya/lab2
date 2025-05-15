@@ -1,0 +1,95 @@
+#include "column.h"
+
+#include <QLineEdit>
+#include <QPushButton>
+#include <QScrollBar>
+#include <QTimer>
+#include <stdexcept>
+#include "array_sequence.h"
+#include "list_sequence.h"
+#include <QInputDialog>
+#include "visualize.h"
+
+Column::Column(QWidget* parent) : QWidget(parent) {
+    QVBoxLayout* mainLayout = new QVBoxLayout(this);
+
+    scrollArea = new QScrollArea(this);
+    scrollArea->setWidgetResizable(true);
+    mainLayout->addWidget(scrollArea);
+
+    vectorsWidget = new QWidget(this);
+    vectorsLayout = new QVBoxLayout(vectorsWidget);
+    vectorsLayout->setSpacing(10);
+    vectorsLayout->setContentsMargins(5, 5, 5, 5);
+    vectorsLayout->addStretch();
+    scrollArea->setWidget(vectorsWidget);
+
+    QWidget* buttons = new QWidget(this);
+    QHBoxLayout* buttonsLayout = new QHBoxLayout(buttons);
+    QPushButton* addButton = new QPushButton("Добавить", this);
+    QPushButton* trashButton = new QPushButton(this);
+    trashButton->setIcon(QIcon::fromTheme("user-trash"));
+    trashButton->setIconSize(QSize(20, 20));
+    buttonsLayout->addWidget(addButton);
+    buttonsLayout->addWidget(trashButton);
+
+    QObject::connect(addButton, &QPushButton::clicked, this, &Column::AskedAdd);
+    QObject::connect(trashButton, &QPushButton::clicked, this, &Column::Clear);
+
+    mainLayout->addWidget(buttons);
+    setLayout(mainLayout);
+}
+
+void Column::Clear() {
+}
+
+template <class I>
+void splitToSeq(const QString& s, Sequence<int, I>* res) {
+    QStringList input = s.split(' ', Qt::SkipEmptyParts);
+    for (const QString& c : input) {
+        bool ok = 1;
+        int val = c.toInt(&ok);
+        if (!ok) {
+            throw std::runtime_error("Overflow or incorrect string!");
+        }
+        res->Append(val);
+    }
+}
+
+template <class T>
+QDebug operator<<(QDebug dbg, const T& obj) {
+    std::ostringstream oss;
+    oss << obj;
+    dbg << QString::fromStdString(oss.str());
+    return dbg;
+}
+
+void ColumnArray::AddSeq(const QString& s) {
+    ArraySequence<int>* cur = new ArraySequence<int>();
+    splitToSeq(s, cur);
+    qDebug() << "ColumnArray::addSeq: " << (*cur);
+
+    ArraySequenceVisualize* line = new ArraySequenceVisualize(vectorsWidget);
+    line->Initialize(cur);
+
+    vectorsLayout->addWidget(line);
+
+    vectorsWidget->adjustSize();
+    QTimer::singleShot(
+        0, this, [this]() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum()); });
+}
+
+void ColumnList::AddSeq(const QString& s) {
+    ListSequence<int>* cur = new ListSequence<int>();
+    splitToSeq(s, cur);
+    qDebug() << "ColumnList::addSeq: " << (*cur);
+
+    ListSequenceVisualize* line = new ListSequenceVisualize(vectorsWidget);
+    line->Initialize(cur);
+
+    vectorsLayout->addWidget(line);
+
+    vectorsWidget->adjustSize();
+    QTimer::singleShot(
+        0, this, [this]() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum()); });
+}
