@@ -53,7 +53,7 @@ int main(int argc, char* argv[]) {
 
     window->setLayout(mainLayout);
     window->setWindowTitle("Визуализация АТД");
-    window->resize(900, 900);
+    window->setWindowState(Qt::WindowMaximized);
     window->show();
 
     return app.exec();

@@ -11,7 +11,6 @@ SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     scene = new QGraphicsScene(this);
     view = new QGraphicsView(scene, this);
     view->setRenderHint(QPainter::Antialiasing);
-    view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
     view->setFrameShape(QFrame::NoFrame);
     view->setFixedHeight(32);
 
@@ -58,7 +57,6 @@ void ArraySequenceVisualize::VisualizeSeq() {
 
     int totalWidth = i * boxSize;
     scene->setSceneRect(0, 0, totalWidth, boxSize + 2);
-    view->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 }
 
 void ArraySequenceVisualize::Prepend() {
