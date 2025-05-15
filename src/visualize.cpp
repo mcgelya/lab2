@@ -5,6 +5,8 @@
 #include <QInputDialog>
 #include <QGraphicsRectItem>
 #include <QGraphicsTextItem>
+#include <QGuiApplication>
+#include <QStyleHints>
 
 SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -34,6 +36,10 @@ void ArraySequenceVisualize::Initialize(ArraySequence<int>* v) {
     VisualizeSeq();
 }
 
+bool IsDarkTheme() {
+    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+}
+
 void ArraySequenceVisualize::VisualizeSeq() {
     scene->clear();
 
@@ -42,12 +48,14 @@ void ArraySequenceVisualize::VisualizeSeq() {
 
     QFont font;
     font.setPointSize(10);
+    QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
+    QBrush brush(Qt::NoBrush);
 
     int i = 0;
     for (int v : *seq) {
         int x = i * boxSize;
 
-        QGraphicsRectItem* rect = scene->addRect(x, 0, boxSize, boxSize, QPen(Qt::black), QBrush(Qt::white));
+        QGraphicsRectItem* rect = scene->addRect(x, 0, boxSize, boxSize, pen, brush);
 
         QGraphicsTextItem* text = scene->addText(QString::number(v), font);
         QRectF textRect = text->boundingRect();
@@ -91,8 +99,9 @@ void ListSequenceVisualize::VisualizeSeq() {
 
     QFont font;
     font.setPointSize(10);
-    QPen pen(Qt::black);
-    QBrush brush(Qt::white);
+    QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
+    QBrush brush(Qt::NoBrush);
+    QBrush brushArrow(IsDarkTheme() ? Qt::white : Qt::black);
 
     int i = 0;
     for (int v : *seq) {
@@ -112,7 +121,7 @@ void ListSequenceVisualize::VisualizeSeq() {
 
             QPolygonF arrow;
             arrow << QPointF(x2, y) << QPointF(x2 - 6, y - 4) << QPointF(x2 - 6, y + 4);
-            scene->addPolygon(arrow, pen, QBrush(Qt::black));
+            scene->addPolygon(arrow, pen, brushArrow);
         }
         ++i;
     }
