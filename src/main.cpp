@@ -30,7 +30,8 @@ int main(int argc, char* argv[]) {
         try {
             arrayColumn->AddSeq(input->text());
         } catch (const std::runtime_error& e) {
-            QMessageBox::critical(window, "Ошибка", "Введенные данные некорректны!\nПожалуйста, попробуйте снова.",
+            QMessageBox::critical(window, "Ошибка",
+                                  "Вы ввели не числа или число слишком большое.\nПожалуйста, попробуйте снова.",
                                   QMessageBox::Ok);
         }
         input->clear();
@@ -40,7 +41,8 @@ int main(int argc, char* argv[]) {
         try {
             listColumn->AddSeq(input->text());
         } catch (const std::runtime_error& e) {
-            QMessageBox::critical(window, "Ошибка", "Введенные данные некорректны!\nПожалуйста, попробуйте снова.",
+            QMessageBox::critical(window, "Ошибка",
+                                  "Вы ввели не числа или число слишком большое.\nПожалуйста, попробуйте снова.",
                                   QMessageBox::Ok);
         }
         input->clear();
