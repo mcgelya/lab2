@@ -40,7 +40,28 @@ Column::Column(QWidget* parent) : QWidget(parent) {
     setLayout(mainLayout);
 }
 
+void ClearLayout(QLayout* layout) {
+    if (layout == nullptr) {
+        return;
+    }
+    QLayoutItem* item;
+    while ((item = layout->takeAt(0)) != nullptr) {
+        if (QWidget* w = item->widget()) {
+            w->deleteLater();
+        }
+        if (QLayout* childLayout = item->layout()) {
+            ClearLayout(childLayout);
+        }
+        delete item;
+    }
+}
+
 void Column::Clear() {
+    ClearLayout(vectorsLayout);
+
+    vectorsLayout->setSpacing(10);
+    vectorsLayout->setContentsMargins(5, 5, 5, 5);
+    vectorsLayout->addStretch();
 }
 
 template <class I>
