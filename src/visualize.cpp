@@ -74,7 +74,7 @@ void ArraySequenceVisualize::VisualizeSeq() {
     QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
     QBrush brush(Qt::NoBrush);
 
-    QPen penGray(IsDarkTheme() ? Qt::gray : Qt::lightGray);
+    QPen penGray(IsDarkTheme() ? Qt::darkGray : Qt::lightGray);
     for (int i = seq->GetLength(); i < seq->GetCapacity(); ++i) {
         int x = i * boxSize;
         scene->addRect(x, 0, boxSize, boxSize, penGray, brush);
