@@ -6,7 +6,7 @@
 #include <QInputDialog>
 #include <QPushButton>
 
-#include "util.h"
+#include "utils.h"
 
 SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -65,10 +65,10 @@ void ArraySequenceVisualize::VisualizeSeq() {
 
     QFont font;
     font.setPointSize(10);
-    QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
+    QPen pen(utils::IsDarkTheme() ? Qt::white : Qt::black);
     QBrush brush(Qt::NoBrush);
 
-    QPen penGray(IsDarkTheme() ? Qt::darkGray : Qt::lightGray);
+    QPen penGray(utils::IsDarkTheme() ? Qt::darkGray : Qt::lightGray);
     for (int i = seq->GetLength(); i < seq->GetCapacity(); ++i) {
         int x = i * boxSize;
         scene->addRect(x, 0, boxSize, boxSize, penGray, brush);
@@ -94,9 +94,9 @@ void ListSequenceVisualize::VisualizeSeq() {
 
     QFont font;
     font.setPointSize(10);
-    QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
+    QPen pen(utils::IsDarkTheme() ? Qt::white : Qt::black);
     QBrush brush(Qt::NoBrush);
-    QBrush brushArrow(IsDarkTheme() ? Qt::white : Qt::black);
+    QBrush brushArrow(utils::IsDarkTheme() ? Qt::white : Qt::black);
 
     for (IConstEnumerator<int>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
         int i = it->Index();

@@ -5,7 +5,6 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QWidget>
-#include <exception>
 #include <stdexcept>
 
 #include "column.h"

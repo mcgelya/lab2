@@ -1,8 +1,10 @@
-#include "util.h"
+#include "utils.h"
 
 #include <QGuiApplication>
 #include <QStyleHints>
 #include <stdexcept>
+
+namespace utils {
 
 void ClearLayout(QLayout* layout) {
     if (layout == nullptr) {
@@ -53,3 +55,5 @@ void SplitToSeq(const QString& line, Sequence<int>* res) {
 bool IsDarkTheme() {
     return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
 }
+
+}  // namespace utils

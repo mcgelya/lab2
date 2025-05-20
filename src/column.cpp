@@ -8,7 +8,7 @@
 
 #include "array_sequence.h"
 #include "list_sequence.h"
-#include "util.h"
+#include "utils.h"
 #include "visualize.h"
 
 Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
@@ -42,13 +42,12 @@ Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
 }
 
 void Column::Clear() {
-    ClearLayout(vectorsLayout);
+    utils::ClearLayout(vectorsLayout);
 }
 
 void Column::AddArraySequence(const QString& s) {
     ArraySequence<int>* cur = new ArraySequence<int>();
-    SplitToSeq(s, cur);
-    qDebug() << "ColumnArray::addSeq: " << *cur;
+    utils::SplitToSeq(s, cur);
 
     ArraySequenceVisualize* line = new ArraySequenceVisualize(vectorsWidget);
     line->Initialize(cur);
@@ -62,8 +61,7 @@ void Column::AddArraySequence(const QString& s) {
 
 void Column::AddListSequence(const QString& s) {
     ListSequence<int>* cur = new ListSequence<int>();
-    SplitToSeq(s, cur);
-    qDebug() << "ColumnList::addSeq: " << *cur;
+    utils::SplitToSeq(s, cur);
 
     ListSequenceVisualize* line = new ListSequenceVisualize(vectorsWidget);
     line->Initialize(cur);
