@@ -61,8 +61,8 @@ bool IsDarkTheme() {
 void ArraySequenceVisualize::VisualizeSeq() {
     scene->clear();
 
-    constexpr int boxSize = 30;
-    constexpr int startY = 1;
+    const int boxSize = 30;
+    const int startY = 1;
 
     QFont font;
     font.setPointSize(10);

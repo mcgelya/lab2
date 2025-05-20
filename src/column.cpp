@@ -21,7 +21,7 @@ Column::Column(QWidget* parent) : QWidget(parent) {
     vectorsLayout = new QVBoxLayout(vectorsWidget);
     vectorsLayout->setSpacing(10);
     vectorsLayout->setContentsMargins(5, 5, 5, 5);
-    vectorsLayout->addStretch();
+    vectorsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     scrollArea->setWidget(vectorsWidget);
 
     QWidget* buttons = new QWidget(this);
@@ -33,7 +33,7 @@ Column::Column(QWidget* parent) : QWidget(parent) {
     buttonsLayout->addWidget(addButton);
     buttonsLayout->addWidget(trashButton);
 
-    QObject::connect(addButton, &QPushButton::clicked, this, &Column::AskedAdd);
+    QObject::connect(addButton, &QPushButton::clicked, this, &Column::AskedToAdd);
     QObject::connect(trashButton, &QPushButton::clicked, this, &Column::Clear);
 
     mainLayout->addWidget(buttons);
@@ -58,10 +58,6 @@ void ClearLayout(QLayout* layout) {
 
 void Column::Clear() {
     ClearLayout(vectorsLayout);
-
-    vectorsLayout->setSpacing(10);
-    vectorsLayout->setContentsMargins(5, 5, 5, 5);
-    vectorsLayout->addStretch();
 }
 
 void SplitToSeq(const QString& s, Sequence<int>* res) {
@@ -84,7 +80,7 @@ QDebug operator<<(QDebug dbg, const T& obj) {
     return dbg;
 }
 
-void ColumnArray::AddSeq(const QString& s) {
+void Column::AddArraySequence(const QString& s) {
     ArraySequence<int>* cur = new ArraySequence<int>();
     SplitToSeq(s, cur);
     qDebug() << "ColumnArray::addSeq: " << *cur;
@@ -99,7 +95,7 @@ void ColumnArray::AddSeq(const QString& s) {
         0, this, [this]() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum()); });
 }
 
-void ColumnList::AddSeq(const QString& s) {
+void Column::AddListSequence(const QString& s) {
     ListSequence<int>* cur = new ListSequence<int>();
     SplitToSeq(s, cur);
     qDebug() << "ColumnList::addSeq: " << *cur;

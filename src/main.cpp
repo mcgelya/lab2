@@ -17,8 +17,8 @@ int main(int argc, char* argv[]) {
     QVBoxLayout* mainLayout = new QVBoxLayout();
     QHBoxLayout* columnLayout = new QHBoxLayout();
 
-    Column* arrayColumn = new ColumnArray();
-    Column* listColumn = new ColumnList();
+    Column* arrayColumn = new Column();
+    Column* listColumn = new Column();
 
     columnLayout->addWidget(arrayColumn);
     columnLayout->addWidget(listColumn);
@@ -26,9 +26,9 @@ int main(int argc, char* argv[]) {
     QLineEdit* input = new QLineEdit();
     input->setPlaceholderText("Введите последовательность...");
 
-    QObject::connect(arrayColumn, &ColumnArray::AskedAdd, [=]() {
+    QObject::connect(arrayColumn, &Column::AskedToAdd, [=]() {
         try {
-            arrayColumn->AddSeq(input->text());
+            arrayColumn->AddArraySequence(input->text());
         } catch (const std::runtime_error& e) {
             QMessageBox::critical(window, "Ошибка",
                                   "Вы ввели не числа или число слишком большое.\nПожалуйста, попробуйте снова.",
@@ -37,9 +37,9 @@ int main(int argc, char* argv[]) {
         input->clear();
     });
 
-    QObject::connect(listColumn, &ColumnList::AskedAdd, [=]() {
+    QObject::connect(listColumn, &Column::AskedToAdd, [=]() {
         try {
-            listColumn->AddSeq(input->text());
+            listColumn->AddListSequence(input->text());
         } catch (const std::runtime_error& e) {
             QMessageBox::critical(window, "Ошибка",
                                   "Вы ввели не числа или число слишком большое.\nПожалуйста, попробуйте снова.",

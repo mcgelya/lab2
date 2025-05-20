@@ -12,33 +12,17 @@ public:
     Column(QWidget* parent = nullptr);
 
 public slots:
-    virtual void AddSeq(const QString& s) = 0;
+    void AddArraySequence(const QString& s);
+
+    void AddListSequence(const QString& s);
 
     void Clear();
 
 signals:
-    void AskedAdd();
+    void AskedToAdd();
 
 protected:
     QScrollArea* scrollArea;
     QWidget* vectorsWidget;
     QVBoxLayout* vectorsLayout;
-};
-
-class ColumnArray : public Column {
-    Q_OBJECT
-
-    using Column::Column;
-
-public slots:
-    void AddSeq(const QString& s) override;
-};
-
-class ColumnList : public Column {
-    Q_OBJECT
-
-    using Column::Column;
-
-public slots:
-    void AddSeq(const QString& s) override;
 };
