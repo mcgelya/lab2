@@ -2,8 +2,7 @@
 
 #include <QWidget>
 #include <QGraphicsView>
-#include "array_sequence.h"
-#include "list_sequence.h"
+#include "sequence.h"
 
 class SequenceVisualize : public QWidget {
     Q_OBJECT
@@ -11,16 +10,20 @@ class SequenceVisualize : public QWidget {
 public:
     SequenceVisualize(QWidget* parent = nullptr);
 
+    void Initialize(Sequence<int>* seq);
+
     virtual void VisualizeSeq() = 0;
 
 public slots:
-    virtual void Prepend() = 0;
+    void Prepend();
 
-    virtual void Append() = 0;
+    void Append();
 
 protected:
     QGraphicsScene* scene;
     QGraphicsView* view;
+
+    Sequence<int>* seq;
 };
 
 class ArraySequenceVisualize : public SequenceVisualize {
@@ -29,17 +32,7 @@ class ArraySequenceVisualize : public SequenceVisualize {
     using SequenceVisualize::SequenceVisualize;
 
 public:
-    void Initialize(ArraySequence<int>* v);
-
     void VisualizeSeq() override;
-
-public slots:
-    void Prepend() override;
-
-    void Append() override;
-
-private:
-    ArraySequence<int>* seq;
 };
 
 class ListSequenceVisualize : public SequenceVisualize {
@@ -48,15 +41,5 @@ class ListSequenceVisualize : public SequenceVisualize {
     using SequenceVisualize::SequenceVisualize;
 
 public:
-    void Initialize(ListSequence<int>* v);
-
     void VisualizeSeq() override;
-
-public slots:
-    void Prepend() override;
-
-    void Append() override;
-
-private:
-    ListSequence<int>* seq;
 };

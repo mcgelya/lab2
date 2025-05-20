@@ -1,37 +1,74 @@
 #pragma once
 
+#include <cassert>
 #include "ienum.h"
 #include "linked_list.h"
 #include "sequence.h"
 
 template <class T>
-class ListSequenceIterator {
+class ListSequenceIterator : public IEnumerator<T> {
 public:
     ListSequenceIterator(ListNode<T>* it) : it(it) {
     }
 
-    bool NotEqual(const ListSequenceIterator<T>& other) const {
-        return it != other.it;
+    bool IsEnd() const override {
+        return it == nullptr;
     }
 
-    T& Dereference() {
-        return it->value;
-    }
-
-    const T& ConstDereference() const {
-        return it->value;
-    }
-
-    void MoveNext() {
+    void MoveNext() override {
+        assert(it != nullptr);
         it = it->next;
+        ++index;
+    }
+
+    T& Dereference() override {
+        assert(it != nullptr);
+        return it->value;
+    }
+
+    int Index() const override {
+        return index;
     }
 
 private:
     ListNode<T>* it;
+
+    int index = 0;
 };
 
 template <class T>
-class ListSequence : public Sequence<T, ListSequenceIterator<T>> {
+class ListSequenceConstIterator : public IConstEnumerator<T> {
+public:
+    ListSequenceConstIterator(ListNode<T>* it) : it(it) {
+    }
+
+    bool IsEnd() const override {
+        return it == nullptr;
+    }
+
+    void MoveNext() override {
+        assert(it != nullptr);
+        it = it->next;
+        ++index;
+    }
+
+    const T& ConstDereference() const override {
+        assert(it != nullptr);
+        return it->value;
+    }
+
+    int Index() const override {
+        return index;
+    }
+
+private:
+    ListNode<T>* it;
+
+    int index = 0;
+};
+
+template <class T>
+class ListSequence : public Sequence<T> {
 public:
     ListSequence(const T* items, int count) {
         data = new LinkedList<T>(items, count);
@@ -93,20 +130,12 @@ public:
         return res;
     }
 
-    IEnumerator<T, ListSequenceIterator<T>> begin() override {
-        return ListSequenceIterator<T>(data->GetBegin());
+    IEnumerator<T>* GetEnumerator() override {
+        return new ListSequenceIterator<T>(data->GetBegin());
     }
 
-    IEnumerator<T, ListSequenceIterator<T>> end() override {
-        return ListSequenceIterator<T>(nullptr);
-    }
-
-    IEnumeratorConst<T, ListSequenceIterator<T>> begin() const override {
-        return ListSequenceIterator<T>(data->GetBegin());
-    }
-
-    IEnumeratorConst<T, ListSequenceIterator<T>> end() const override {
-        return ListSequenceIterator<T>(nullptr);
+    IConstEnumerator<T>* GetConstEnumerator() const override {
+        return new ListSequenceConstIterator<T>(data->GetBegin());
     }
 
 protected:

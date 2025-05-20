@@ -31,9 +31,27 @@ SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     setLayout(layout);
 }
 
-void ArraySequenceVisualize::Initialize(ArraySequence<int>* v) {
+void SequenceVisualize::Initialize(Sequence<int>* v) {
     seq = v;
     VisualizeSeq();
+}
+
+void SequenceVisualize::Prepend() {
+    bool ok = 1;
+    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
+    if (ok) {
+        seq->Prepend(x);
+        VisualizeSeq();
+    }
+}
+
+void SequenceVisualize::Append() {
+    bool ok = 1;
+    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
+    if (ok) {
+        seq->Append(x);
+        VisualizeSeq();
+    }
 }
 
 bool IsDarkTheme() {
@@ -51,43 +69,19 @@ void ArraySequenceVisualize::VisualizeSeq() {
     QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
     QBrush brush(Qt::NoBrush);
 
-    int i = 0;
-    for (int v : *seq) {
-        int x = i * boxSize;
+    for (IConstEnumerator<int>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        int x = it->Index() * boxSize;
+        int value = it->ConstDereference();
 
         QGraphicsRectItem* rect = scene->addRect(x, 0, boxSize, boxSize, pen, brush);
 
-        QGraphicsTextItem* text = scene->addText(QString::number(v), font);
+        QGraphicsTextItem* text = scene->addText(QString::number(value), font);
         QRectF textRect = text->boundingRect();
         text->setPos(x + (boxSize - textRect.width()) / 2, startY + (boxSize - textRect.height()) / 2);
-        ++i;
     }
 
-    int totalWidth = i * boxSize;
+    int totalWidth = seq->GetLength() * boxSize;
     scene->setSceneRect(0, 0, totalWidth, boxSize + 2);
-}
-
-void ArraySequenceVisualize::Prepend() {
-    bool ok = 1;
-    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    if (ok) {
-        seq->Prepend(x);
-        VisualizeSeq();
-    }
-}
-
-void ArraySequenceVisualize::Append() {
-    bool ok = 1;
-    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    if (ok) {
-        seq->Append(x);
-        VisualizeSeq();
-    }
-}
-
-void ListSequenceVisualize::Initialize(ListSequence<int>* v) {
-    seq = v;
-    VisualizeSeq();
 }
 
 void ListSequenceVisualize::VisualizeSeq() {
@@ -103,16 +97,17 @@ void ListSequenceVisualize::VisualizeSeq() {
     QBrush brush(Qt::NoBrush);
     QBrush brushArrow(IsDarkTheme() ? Qt::white : Qt::black);
 
-    int i = 0;
-    for (int v : *seq) {
-        int x = i * (nodeSize + spacing);
+    for (IConstEnumerator<int>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        int x = it->Index() * (nodeSize + spacing);
+        int value = it->ConstDereference();
+
         QGraphicsEllipseItem* circle = scene->addEllipse(x, startY, nodeSize, nodeSize, pen, brush);
 
-        QGraphicsTextItem* text = scene->addText(QString::number(v), font);
+        QGraphicsTextItem* text = scene->addText(QString::number(value), font);
         QRectF textRect = text->boundingRect();
         text->setPos(x + (nodeSize - textRect.width()) / 2, startY + (nodeSize - textRect.height()) / 2);
 
-        if (i + 1 < seq->GetLength()) {
+        if (it->Index() + 1 < seq->GetLength()) {
             int x1 = x + nodeSize;
             int x2 = x + nodeSize + spacing;
             int y = startY + nodeSize / 2;
@@ -123,27 +118,8 @@ void ListSequenceVisualize::VisualizeSeq() {
             arrow << QPointF(x2, y) << QPointF(x2 - 6, y - 4) << QPointF(x2 - 6, y + 4);
             scene->addPolygon(arrow, pen, brushArrow);
         }
-        ++i;
     }
 
-    int totalWidth = i * (nodeSize + spacing);
+    int totalWidth = seq->GetLength() * (nodeSize + spacing);
     scene->setSceneRect(0, 0, totalWidth + 20, nodeSize + 2);
-}
-
-void ListSequenceVisualize::Prepend() {
-    bool ok = 1;
-    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    if (ok) {
-        seq->Prepend(x);
-        VisualizeSeq();
-    }
-}
-
-void ListSequenceVisualize::Append() {
-    bool ok = 1;
-    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    if (ok) {
-        seq->Append(x);
-        VisualizeSeq();
-    }
 }

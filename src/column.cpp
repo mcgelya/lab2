@@ -64,8 +64,7 @@ void Column::Clear() {
     vectorsLayout->addStretch();
 }
 
-template <class I>
-void splitToSeq(const QString& s, Sequence<int, I>* res) {
+void SplitToSeq(const QString& s, Sequence<int>* res) {
     QStringList input = s.split(' ', Qt::SkipEmptyParts);
     for (const QString& c : input) {
         bool ok = 1;
@@ -87,8 +86,8 @@ QDebug operator<<(QDebug dbg, const T& obj) {
 
 void ColumnArray::AddSeq(const QString& s) {
     ArraySequence<int>* cur = new ArraySequence<int>();
-    splitToSeq(s, cur);
-    qDebug() << "ColumnArray::addSeq: " << (*cur);
+    SplitToSeq(s, cur);
+    qDebug() << "ColumnArray::addSeq: " << *cur;
 
     ArraySequenceVisualize* line = new ArraySequenceVisualize(vectorsWidget);
     line->Initialize(cur);
@@ -102,8 +101,8 @@ void ColumnArray::AddSeq(const QString& s) {
 
 void ColumnList::AddSeq(const QString& s) {
     ListSequence<int>* cur = new ListSequence<int>();
-    splitToSeq(s, cur);
-    qDebug() << "ColumnList::addSeq: " << (*cur);
+    SplitToSeq(s, cur);
+    qDebug() << "ColumnList::addSeq: " << *cur;
 
     ListSequenceVisualize* line = new ListSequenceVisualize(vectorsWidget);
     line->Initialize(cur);

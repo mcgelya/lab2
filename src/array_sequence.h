@@ -6,33 +6,69 @@
 #include "sequence.h"
 
 template <class T>
-class ArraySequenceIterator {
+class ArraySequenceIterator : public IEnumerator<T> {
 public:
-    ArraySequenceIterator(T* it) : it(it) {
+    ArraySequenceIterator(T* it, int size) : it(it), size(size) {
     }
 
-    bool NotEqual(const ArraySequenceIterator<T>& other) const {
-        return it != other.it;
+    bool IsEnd() const override {
+        return index == size;
     }
 
-    T& Dereference() {
-        return *it;
-    }
-
-    const T& ConstDereference() const {
-        return *it;
-    }
-
-    void MoveNext() {
+    void MoveNext() override {
+        assert(index < size);
         ++it;
+        ++index;
+    }
+
+    T& Dereference() override {
+        assert(index < size);
+        return *it;
+    }
+
+    int Index() const override {
+        return index;
     }
 
 private:
     T* it;
+    const int size;
+    int index = 0;
 };
 
 template <class T>
-class ArraySequence : public Sequence<T, ArraySequenceIterator<T>> {
+class ArraySequenceConstIterator : public IConstEnumerator<T> {
+public:
+    ArraySequenceConstIterator(T* it, int size) : it(it), size(size) {
+    }
+
+    bool IsEnd() const override {
+        return index == size;
+    }
+
+    void MoveNext() override {
+        assert(index < size);
+        ++it;
+        ++index;
+    }
+
+    const T& ConstDereference() const override {
+        assert(index < size);
+        return *it;
+    }
+
+    int Index() const override {
+        return index;
+    }
+
+private:
+    T* it;
+    const int size;
+    int index = 0;
+};
+
+template <class T>
+class ArraySequence : public Sequence<T> {
 public:
     ArraySequence(const T* items, int count) {
         data = new DynamicArray<T>(items, count);
@@ -122,20 +158,12 @@ public:
         return res;
     }
 
-    IEnumerator<T, ArraySequenceIterator<T>> begin() override {
-        return ArraySequenceIterator<T>(data->GetBegin());
+    IEnumerator<T>* GetEnumerator() override {
+        return new ArraySequenceIterator<T>(data->GetBegin(), size);
     }
 
-    IEnumerator<T, ArraySequenceIterator<T>> end() override {
-        return ArraySequenceIterator<T>(data->GetBegin() + size);
-    }
-
-    IEnumeratorConst<T, ArraySequenceIterator<T>> begin() const override {
-        return ArraySequenceIterator<T>(data->GetBegin());
-    }
-
-    IEnumeratorConst<T, ArraySequenceIterator<T>> end() const override {
-        return ArraySequenceIterator<T>(data->GetBegin() + size);
+    IConstEnumerator<T>* GetConstEnumerator() const override {
+        return new ArraySequenceConstIterator<T>(data->GetBegin(), size);
     }
 
 protected:

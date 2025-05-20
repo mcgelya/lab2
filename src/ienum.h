@@ -1,55 +1,33 @@
 #pragma once
 
-template <class T, class I>
+template <class T>
 class IEnumerator {
 public:
-    IEnumerator(const I& it) : it(it) {
-    }
+    virtual bool IsEnd() const = 0;
 
-    bool operator!=(const IEnumerator<T, I>& other) const {
-        return it.NotEqual(other.it);
-    }
+    virtual void MoveNext() = 0;
 
-    T& operator*() {
-        return it.Dereference();
-    }
+    virtual T& Dereference() = 0;
 
-    IEnumerator<T, I>& operator++() {
-        it.MoveNext();
-        return *this;
-    }
-
-    I it;
+    virtual int Index() const = 0;
 };
 
-template <class T, class I>
-class IEnumeratorConst {
+template <class T>
+class IConstEnumerator {
 public:
-    IEnumeratorConst(const I& it) : it(it) {
-    }
+    virtual bool IsEnd() const = 0;
 
-    bool operator!=(const IEnumeratorConst<T, I>& other) const {
-        return it.NotEqual(other.it);
-    }
+    virtual void MoveNext() = 0;
 
-    const T& operator*() const {
-        return it.ConstDereference();
-    }
+    virtual const T& ConstDereference() const = 0;
 
-    IEnumeratorConst<T, I>& operator++() {
-        it.MoveNext();
-        return *this;
-    }
-
-    I it;
+    virtual int Index() const = 0;
 };
 
-template <class T, class I>
+template <class T>
 class IEnumerable {
 public:
-    virtual IEnumerator<T, I> begin() = 0;
-    virtual IEnumerator<T, I> end() = 0;
+    virtual IEnumerator<T>* GetEnumerator() = 0;
 
-    virtual IEnumeratorConst<T, I> begin() const = 0;
-    virtual IEnumeratorConst<T, I> end() const = 0;
+    virtual IConstEnumerator<T>* GetConstEnumerator() const = 0;
 };

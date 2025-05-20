@@ -120,36 +120,41 @@ TEST_CASE("ArraySequence concat") {
 
 TEST_CASE("ListSequence enumerable") {
     ListSequence<int>* a = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
-    for (int& i : *a) {
-        ++i;
+    for (IEnumerator<int>* it = a->GetEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        ++it->Dereference();
     }
     int j = 2;
-    for (const int& i : *a) {
-        REQUIRE(i == j);
+    for (IConstEnumerator<int>* it = a->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        int val = it->ConstDereference();
+        REQUIRE(val == j);
         ++j;
     }
     // compiling
     const ListSequence<int>* b = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
-    for (const int& i : *b) {
-        std::cout << i << " ";
+    IConstEnumerator<int>* it = b->GetConstEnumerator();
+    for (IConstEnumerator<int>* it = b->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        std::cout << it->ConstDereference() << " ";
     }
     std::cout << std::endl;
 }
 
 TEST_CASE("ArraySequence enumerable") {
-    ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
-    for (int& i : *a) {
-        ++i;
+    ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3}, 3);
+    for (IEnumerator<int>* it = a->GetEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        ++it->Dereference();
     }
     int j = 2;
-    for (const int& i : *a) {
-        REQUIRE(i == j);
+    for (IConstEnumerator<int>* it = a->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        int val = it->ConstDereference();
+        REQUIRE(val == j);
         ++j;
     }
+    REQUIRE(j == 5);
     // compiling
-    const ListSequence<int>* b = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
-    for (const int& i : *b) {
-        std::cout << i << " ";
+    const ArraySequence<int>* b = new ArraySequence<int>(new int[]{1, 2, 3}, 3);
+    IConstEnumerator<int>* it = b->GetConstEnumerator();
+    for (IConstEnumerator<int>* it = b->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        std::cout << it->ConstDereference() << " ";
     }
     std::cout << std::endl;
 }
