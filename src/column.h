@@ -1,15 +1,15 @@
 #pragma once
 
-#include <QWidget>
-#include <QVBoxLayout>
-#include <QScrollArea>
 #include <QPushButton>
+#include <QScrollArea>
+#include <QVBoxLayout>
+#include <QWidget>
 
 class Column : public QWidget {
     Q_OBJECT
 
 public:
-    Column(QWidget* parent = nullptr);
+    Column(const QString& name, QWidget* parent = nullptr);
 
 public slots:
     void AddArraySequence(const QString& s);

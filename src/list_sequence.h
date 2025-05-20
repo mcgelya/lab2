@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cassert>
+
 #include "ienum.h"
 #include "linked_list.h"
 #include "sequence.h"

@@ -1,13 +1,14 @@
 #include <QApplication>
-#include <QWidget>
-#include <QVBoxLayout>
+#include <QFrame>
+#include <QIcon>
 #include <QLineEdit>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QScrollArea>
 #include <QScrollBar>
-#include <QFrame>
-#include <QIcon>
-#include <QMessageBox>
+#include <QVBoxLayout>
+#include <QWidget>
+
 #include "column.h"
 
 int main(int argc, char* argv[]) {
@@ -17,8 +18,8 @@ int main(int argc, char* argv[]) {
     QVBoxLayout* mainLayout = new QVBoxLayout();
     QHBoxLayout* columnLayout = new QHBoxLayout();
 
-    Column* arrayColumn = new Column();
-    Column* listColumn = new Column();
+    Column* arrayColumn = new Column("массив");
+    Column* listColumn = new Column("список");
 
     columnLayout->addWidget(arrayColumn);
     columnLayout->addWidget(listColumn);

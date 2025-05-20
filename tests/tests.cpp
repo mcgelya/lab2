@@ -1,8 +1,8 @@
 #include <catch2/catch_test_macros.hpp>
-#include "../src/list_sequence.h"
-#include "../src/array_sequence.h"
-
 #include <iostream>
+
+#include "../src/array_sequence.h"
+#include "../src/list_sequence.h"
 
 TEST_CASE("ListSequence append") {
     ListSequence<int>* l = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);

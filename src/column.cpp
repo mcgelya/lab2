@@ -1,16 +1,17 @@
 #include "column.h"
 
+#include <QInputDialog>
 #include <QLineEdit>
 #include <QPushButton>
 #include <QScrollBar>
 #include <QTimer>
 #include <stdexcept>
+
 #include "array_sequence.h"
 #include "list_sequence.h"
-#include <QInputDialog>
 #include "visualize.h"
 
-Column::Column(QWidget* parent) : QWidget(parent) {
+Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
     QVBoxLayout* mainLayout = new QVBoxLayout(this);
 
     scrollArea = new QScrollArea(this);
@@ -26,7 +27,7 @@ Column::Column(QWidget* parent) : QWidget(parent) {
 
     QWidget* buttons = new QWidget(this);
     QHBoxLayout* buttonsLayout = new QHBoxLayout(buttons);
-    QPushButton* addButton = new QPushButton("Добавить", this);
+    QPushButton* addButton = new QPushButton("Добавить " + name, this);
     QPushButton* trashButton = new QPushButton(this);
     trashButton->setIcon(QIcon::fromTheme("user-trash"));
     trashButton->setIconSize(QSize(20, 20));

@@ -1,8 +1,9 @@
 #pragma once
 
 #include <cassert>
-#include "ienum.h"
+
 #include "dynamic_array.h"
+#include "ienum.h"
 #include "sequence.h"
 
 template <class T>
@@ -127,7 +128,7 @@ public:
         return size;
     }
 
-    int GetCapacity() const {
+    int GetCapacity() const override {
         return capacity;
     }
 

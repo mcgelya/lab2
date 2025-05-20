@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include "ienum.h"
+
 #include "error.h"
+#include "ienum.h"
 
 template <class T>
 class Sequence : public IEnumerable<T> {
@@ -14,6 +15,10 @@ public:
     virtual Sequence<T>* GetSubsequence(int startIndex, int endIndex) const = 0;
 
     virtual int GetLength() const = 0;
+
+    virtual int GetCapacity() const {
+        return GetLength();
+    }
 
     virtual Sequence<T>* Append(const T& item) = 0;
     virtual Sequence<T>* Prepend(const T& item) = 0;

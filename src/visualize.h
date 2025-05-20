@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QWidget>
 #include <QGraphicsView>
+#include <QWidget>
+
 #include "sequence.h"
 
 class SequenceVisualize : public QWidget {

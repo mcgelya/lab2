@@ -1,20 +1,26 @@
 #include "visualize.h"
 
-#include <QHBoxLayout>
-#include <QPushButton>
-#include <QInputDialog>
 #include <QGraphicsRectItem>
 #include <QGraphicsTextItem>
 #include <QGuiApplication>
+#include <QHBoxLayout>
+#include <QInputDialog>
+#include <QPushButton>
 #include <QStyleHints>
 
 SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     QHBoxLayout* layout = new QHBoxLayout(this);
+
     scene = new QGraphicsScene(this);
+    scene->setBackgroundBrush(Qt::NoBrush);
+
     view = new QGraphicsView(scene, this);
+    view->setAttribute(Qt::WA_TranslucentBackground);
+    view->viewport()->setAttribute(Qt::WA_TranslucentBackground);
+    view->viewport()->setAutoFillBackground(false);
+    view->setBackgroundBrush(Qt::NoBrush);
     view->setRenderHint(QPainter::Antialiasing);
     view->setFrameShape(QFrame::NoFrame);
-    view->setFixedHeight(32);
 
     QPushButton* prepend = new QPushButton("+", this);
     prepend->setObjectName("prepend");
@@ -62,12 +68,17 @@ void ArraySequenceVisualize::VisualizeSeq() {
     scene->clear();
 
     const int boxSize = 30;
-    const int startY = 1;
 
     QFont font;
     font.setPointSize(10);
     QPen pen(IsDarkTheme() ? Qt::white : Qt::black);
     QBrush brush(Qt::NoBrush);
+
+    QPen penGray(IsDarkTheme() ? Qt::gray : Qt::lightGray);
+    for (int i = seq->GetLength(); i < seq->GetCapacity(); ++i) {
+        int x = i * boxSize;
+        scene->addRect(x, 0, boxSize, boxSize, penGray, brush);
+    }
 
     for (IConstEnumerator<int>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
         int x = it->Index() * boxSize;
@@ -77,11 +88,8 @@ void ArraySequenceVisualize::VisualizeSeq() {
 
         QGraphicsTextItem* text = scene->addText(QString::number(value), font);
         QRectF textRect = text->boundingRect();
-        text->setPos(x + (boxSize - textRect.width()) / 2, startY + (boxSize - textRect.height()) / 2);
+        text->setPos(x + (boxSize - textRect.width()) / 2, (boxSize - textRect.height()) / 2);
     }
-
-    int totalWidth = seq->GetLength() * boxSize;
-    scene->setSceneRect(0, 0, totalWidth, boxSize + 2);
 }
 
 void ListSequenceVisualize::VisualizeSeq() {
@@ -89,7 +97,6 @@ void ListSequenceVisualize::VisualizeSeq() {
 
     const int nodeSize = 30;
     const int spacing = 30;
-    const int startY = 1;
 
     QFont font;
     font.setPointSize(10);
@@ -98,19 +105,20 @@ void ListSequenceVisualize::VisualizeSeq() {
     QBrush brushArrow(IsDarkTheme() ? Qt::white : Qt::black);
 
     for (IConstEnumerator<int>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
-        int x = it->Index() * (nodeSize + spacing);
+        int i = it->Index();
+        int x = i * (nodeSize + spacing);
         int value = it->ConstDereference();
 
-        QGraphicsEllipseItem* circle = scene->addEllipse(x, startY, nodeSize, nodeSize, pen, brush);
+        QGraphicsEllipseItem* circle = scene->addEllipse(x, 0, nodeSize, nodeSize, pen, brush);
 
         QGraphicsTextItem* text = scene->addText(QString::number(value), font);
         QRectF textRect = text->boundingRect();
-        text->setPos(x + (nodeSize - textRect.width()) / 2, startY + (nodeSize - textRect.height()) / 2);
+        text->setPos(x + (nodeSize - textRect.width()) / 2, (nodeSize - textRect.height()) / 2);
 
-        if (it->Index() + 1 < seq->GetLength()) {
+        if (i + 1 < seq->GetLength()) {
             int x1 = x + nodeSize;
             int x2 = x + nodeSize + spacing;
-            int y = startY + nodeSize / 2;
+            int y = nodeSize / 2;
 
             scene->addLine(x1, y, x2, y, pen);
 
@@ -119,7 +127,4 @@ void ListSequenceVisualize::VisualizeSeq() {
             scene->addPolygon(arrow, pen, brushArrow);
         }
     }
-
-    int totalWidth = seq->GetLength() * (nodeSize + spacing);
-    scene->setSceneRect(0, 0, totalWidth + 20, nodeSize + 2);
 }

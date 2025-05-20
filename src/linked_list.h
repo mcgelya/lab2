@@ -1,7 +1,8 @@
 #pragma once
 
-#include "error.h"
 #include <cassert>
+
+#include "error.h"
 
 template <class T>
 struct ListNode {
