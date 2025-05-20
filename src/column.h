@@ -11,11 +11,11 @@ class Column : public QWidget {
 public:
     Column(const QString& name, QWidget* parent = nullptr);
 
-public slots:
     void AddArraySequence(const QString& s);
 
     void AddListSequence(const QString& s);
 
+public slots:
     void Clear();
 
 signals:

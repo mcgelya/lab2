@@ -1,13 +1,12 @@
 #include <QApplication>
-#include <QFrame>
-#include <QIcon>
+#include <QHBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
-#include <QScrollArea>
-#include <QScrollBar>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <exception>
+#include <stdexcept>
 
 #include "column.h"
 
@@ -30,10 +29,14 @@ int main(int argc, char* argv[]) {
     QObject::connect(arrayColumn, &Column::AskedToAdd, [=]() {
         try {
             arrayColumn->AddArraySequence(input->text());
-        } catch (const std::runtime_error& e) {
-            QMessageBox::critical(window, "Ошибка",
-                                  "Вы ввели не числа или число слишком большое.\nПожалуйста, попробуйте снова.",
+        } catch (const std::invalid_argument& e) {
+            QMessageBox::critical(window, "Ошибка", "Вы ввели не числа.\nПожалуйста, попробуйте снова.",
                                   QMessageBox::Ok);
+        } catch (const std::out_of_range& e) {
+            QMessageBox::critical(window, "Ошибка", "Введенное число слишком большое.\nПожалуйста, попробуйте снова.",
+                                  QMessageBox::Ok);
+        } catch (const std::exception& e) {
+            qWarning() << "Caught: " << e.what();
         }
         input->clear();
     });
@@ -41,10 +44,14 @@ int main(int argc, char* argv[]) {
     QObject::connect(listColumn, &Column::AskedToAdd, [=]() {
         try {
             listColumn->AddListSequence(input->text());
-        } catch (const std::runtime_error& e) {
-            QMessageBox::critical(window, "Ошибка",
-                                  "Вы ввели не числа или число слишком большое.\nПожалуйста, попробуйте снова.",
+        } catch (const std::invalid_argument& e) {
+            QMessageBox::critical(window, "Ошибка", "Вы ввели не числа.\nПожалуйста, попробуйте снова.",
                                   QMessageBox::Ok);
+        } catch (const std::out_of_range& e) {
+            QMessageBox::critical(window, "Ошибка", "Введенное число слишком большое.\nПожалуйста, попробуйте снова.",
+                                  QMessageBox::Ok);
+        } catch (const std::exception& e) {
+            qWarning() << "Caught: " << e.what();
         }
         input->clear();
     });

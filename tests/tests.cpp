@@ -1,5 +1,6 @@
 #include <catch2/catch_test_macros.hpp>
 #include <iostream>
+#include <stdexcept>
 
 #include "../src/array_sequence.h"
 #include "../src/list_sequence.h"
@@ -161,12 +162,12 @@ TEST_CASE("ArraySequence enumerable") {
 
 TEST_CASE("ArraySequence: Index out of range") {
     ArraySequence<int>* a = new ArraySequence<int>(new int[]{1, 2, 3, 4}, 4);
-    REQUIRE_THROWS(a->Get(4));
-    REQUIRE_THROWS(a->Get(-1));
+    REQUIRE_THROWS_AS(a->Get(4), std::out_of_range);
+    REQUIRE_THROWS_AS(a->Get(-1), std::out_of_range);
 }
 
 TEST_CASE("ListSequence: Index out of range") {
     ListSequence<int>* a = new ListSequence<int>(new int[]{1, 2, 3, 4}, 4);
-    REQUIRE_THROWS(a->Get(4));
-    REQUIRE_THROWS(a->Get(-1));
+    REQUIRE_THROWS_AS(a->Get(4), std::out_of_range);
+    REQUIRE_THROWS_AS(a->Get(-1), std::out_of_range);
 }

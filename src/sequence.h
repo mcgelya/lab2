@@ -2,7 +2,6 @@
 
 #include <iostream>
 
-#include "error.h"
 #include "ienum.h"
 
 template <class T>
@@ -29,7 +28,7 @@ public:
 
     Sequence<T>* Concat(Sequence<T>* seq) {
         if (seq == nullptr) {
-            throw ErrorInfo(ErrorCode::NullPointer, "Error: seq is null pointer.");
+            throw std::invalid_argument("Sequence::Concat() received nullptr as argument");
         }
         Sequence<T>* instance = this->Instance();
         for (IConstEnumerator<T>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {

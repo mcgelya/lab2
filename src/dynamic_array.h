@@ -1,6 +1,7 @@
 #pragma once
 
-#include "error.h"
+#include <stdexcept>
+#include <string>
 
 template <class T>
 class DynamicArray {
@@ -32,7 +33,7 @@ public:
 
     const T& Get(int index) const {
         if (index < 0 || index >= size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+            throw std::out_of_range("Index is out of range: " + std::to_string(index) + " " + std::to_string(size));
         }
         return data[index];
     }
@@ -43,7 +44,7 @@ public:
 
     void Set(int index, const T& item) {
         if (index < 0 || index >= size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+            throw std::out_of_range("Index is out of range: " + std::to_string(index) + " " + std::to_string(size));
         }
         data[index] = item;
     }

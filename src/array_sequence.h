@@ -95,28 +95,32 @@ public:
 
     const T& GetFirst() override {
         if (size == 0) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Array is empty.");
+            throw std::out_of_range("List is empty");
         }
         return data->Get(0);
     }
 
     const T& GetLast() override {
         if (size == 0) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Array is empty.");
+            throw std::out_of_range("List is empty");
         }
         return data->Get(size - 1);
     }
 
     const T& Get(int index) override {
         if (index < 0 || index >= size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+            throw std::out_of_range("Index is out of range: " + std::to_string(index) + " " + std::to_string(size));
         }
         return data->Get(index);
     }
 
     ArraySequence<T>* GetSubsequence(int startIndex, int endIndex) const override {
-        if (startIndex < 0 || startIndex >= size || endIndex < 0 || endIndex >= size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+        if (startIndex < 0 || startIndex >= size) {
+            throw std::out_of_range("Index is out of range: " + std::to_string(startIndex) + " " +
+                                    std::to_string(size));
+        }
+        if (endIndex < 0 || endIndex >= size) {
+            throw std::out_of_range("Index is out of range: " + std::to_string(endIndex) + " " + std::to_string(size));
         }
         T* start = data->GetBegin() + startIndex;
         int sz = endIndex - startIndex + 1;

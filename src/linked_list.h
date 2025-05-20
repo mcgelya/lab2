@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cassert>
-
-#include "error.h"
+#include <stdexcept>
+#include <string>
 
 template <class T>
 struct ListNode {
@@ -43,28 +43,32 @@ public:
 
     const T& GetFirst() const {
         if (size == 0) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: List is empty.");
+            throw std::out_of_range("List is empty");
         }
         return first->value;
     }
 
     const T& GetLast() const {
         if (size == 0) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: List is empty.");
+            throw std::out_of_range("List is empty");
         }
         return last->value;
     }
 
     const T& Get(int index) const {
         if (index < 0 || index >= size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+            throw std::out_of_range("Index is out of range: " + std::to_string(index) + " " + std::to_string(size));
         }
         return first->NextNth(index)->value;
     }
 
     LinkedList<T>* GetSubList(int startIndex, int endIndex) {
-        if (startIndex < 0 || startIndex >= size || endIndex < 0 || endIndex >= size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+        if (startIndex < 0 || startIndex >= size) {
+            throw std::out_of_range("Index is out of range: " + std::to_string(startIndex) + " " +
+                                    std::to_string(size));
+        }
+        if (endIndex < 0 || endIndex >= size) {
+            throw std::out_of_range("Index is out of range: " + std::to_string(endIndex) + " " + std::to_string(size));
         }
         LinkedList<T>* res = new LinkedList<T>();
         ListNode<T>* cur = first->NextNth(startIndex);
@@ -108,7 +112,7 @@ public:
     // Insert before index
     void InsertAt(const T& item, int index) {
         if (index < 0 || index > size) {
-            throw ErrorInfo(ErrorCode::IndexOutOfRange, "Error: Index is out of range.");
+            throw std::out_of_range("Index is out of range: " + std::to_string(index) + " " + std::to_string(size));
         }
         if (index == size) {
             Append(item);
@@ -127,7 +131,7 @@ public:
 
     void Concat(LinkedList<T>* l) {
         if (l == nullptr) {
-            throw ErrorInfo(ErrorCode::NullPointer, "Error: l is null pointer.");
+            throw std::invalid_argument("LinkedList::Concat() received nullptr as argument");
         }
         if (size == 0) {
             first = l->first;

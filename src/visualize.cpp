@@ -2,11 +2,11 @@
 
 #include <QGraphicsRectItem>
 #include <QGraphicsTextItem>
-#include <QGuiApplication>
 #include <QHBoxLayout>
 #include <QInputDialog>
 #include <QPushButton>
-#include <QStyleHints>
+
+#include "util.h"
 
 SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     QHBoxLayout* layout = new QHBoxLayout(this);
@@ -23,9 +23,7 @@ SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
     view->setFrameShape(QFrame::NoFrame);
 
     QPushButton* prepend = new QPushButton("+", this);
-    prepend->setObjectName("prepend");
     QPushButton* append = new QPushButton("+", this);
-    append->setObjectName("append");
 
     QObject::connect(prepend, &QPushButton::clicked, this, &SequenceVisualize::Prepend);
     QObject::connect(append, &QPushButton::clicked, this, &SequenceVisualize::Append);
@@ -58,10 +56,6 @@ void SequenceVisualize::Append() {
         seq->Append(x);
         VisualizeSeq();
     }
-}
-
-bool IsDarkTheme() {
-    return QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
 }
 
 void ArraySequenceVisualize::VisualizeSeq() {

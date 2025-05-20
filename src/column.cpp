@@ -5,10 +5,10 @@
 #include <QPushButton>
 #include <QScrollBar>
 #include <QTimer>
-#include <stdexcept>
 
 #include "array_sequence.h"
 #include "list_sequence.h"
+#include "util.h"
 #include "visualize.h"
 
 Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
@@ -41,44 +41,8 @@ Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
     setLayout(mainLayout);
 }
 
-void ClearLayout(QLayout* layout) {
-    if (layout == nullptr) {
-        return;
-    }
-    QLayoutItem* item;
-    while ((item = layout->takeAt(0)) != nullptr) {
-        if (QWidget* w = item->widget()) {
-            w->deleteLater();
-        }
-        if (QLayout* childLayout = item->layout()) {
-            ClearLayout(childLayout);
-        }
-        delete item;
-    }
-}
-
 void Column::Clear() {
     ClearLayout(vectorsLayout);
-}
-
-void SplitToSeq(const QString& s, Sequence<int>* res) {
-    QStringList input = s.split(' ', Qt::SkipEmptyParts);
-    for (const QString& c : input) {
-        bool ok = 1;
-        int val = c.toInt(&ok);
-        if (!ok) {
-            throw std::runtime_error("Overflow or incorrect string!");
-        }
-        res->Append(val);
-    }
-}
-
-template <class T>
-QDebug operator<<(QDebug dbg, const T& obj) {
-    std::ostringstream oss;
-    oss << obj;
-    dbg << QString::fromStdString(oss.str());
-    return dbg;
 }
 
 void Column::AddArraySequence(const QString& s) {
