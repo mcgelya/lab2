@@ -1,7 +1,5 @@
 #pragma once
 
-#include <cassert>
-
 #include "ienum.h"
 #include "linked_list.h"
 #include "sequence.h"
@@ -17,13 +15,11 @@ public:
     }
 
     void MoveNext() override {
-        assert(it != nullptr);
         it = it->next;
         ++index;
     }
 
     T& Dereference() override {
-        assert(it != nullptr);
         return it->value;
     }
 
@@ -48,13 +44,11 @@ public:
     }
 
     void MoveNext() override {
-        assert(it != nullptr);
         it = it->next;
         ++index;
     }
 
     const T& ConstDereference() const override {
-        assert(it != nullptr);
         return it->value;
     }
 

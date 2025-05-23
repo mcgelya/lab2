@@ -1,13 +1,12 @@
 #pragma once
 
-#include <cassert>
 #include <stdexcept>
 #include <string>
 
 template <class T>
 struct ListNode {
     T value;
-    ListNode* next = nullptr;
+    ListNode<T>* next = nullptr;
 
     ListNode(T value) : value(value) {
     }
@@ -140,6 +139,7 @@ public:
             return;
         }
         last->next = l->first;
+        last = l->last;
         size += l->size;
     }
 

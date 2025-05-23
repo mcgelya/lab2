@@ -32,20 +32,21 @@ public:
         }
         Sequence<T>* instance = this->Instance();
         for (IConstEnumerator<T>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
-            instance->Append(it->ConstDereference());
+            instance = instance->Append(it->ConstDereference());
         }
         return instance;
     }
-
-    friend std::ostream& operator<<(std::ostream& os, const Sequence<T>& v) {
-        os << "{";
-        for (IConstEnumerator<T>* it = v.GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
-            os << it->ConstDereference();
-            if (it->Index() + 1 < v.GetLength()) {
-                os << ", ";
-            }
-        }
-        os << "}";
-        return os;
-    }
 };
+
+template <class T>
+std::ostream& operator<<(std::ostream& os, const Sequence<T>& v) {
+    os << "{";
+    for (IConstEnumerator<T>* it = v.GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {
+        os << it->ConstDereference();
+        if (it->Index() + 1 < v.GetLength()) {
+            os << ", ";
+        }
+    }
+    os << "}";
+    return os;
+}

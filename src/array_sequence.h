@@ -1,6 +1,6 @@
 #pragma once
 
-#include <cassert>
+#include <stdexcept>
 
 #include "dynamic_array.h"
 #include "ienum.h"
@@ -95,14 +95,14 @@ public:
 
     const T& GetFirst() override {
         if (size == 0) {
-            throw std::out_of_range("List is empty");
+            throw std::out_of_range("Array is empty");
         }
         return data->Get(0);
     }
 
     const T& GetLast() override {
         if (size == 0) {
-            throw std::out_of_range("List is empty");
+            throw std::out_of_range("Array is empty");
         }
         return data->Get(size - 1);
     }
