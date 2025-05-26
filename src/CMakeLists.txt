@@ -1,5 +1,3 @@
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g -fsanitize=undefined,address")
-
 set(CMAKE_AUTOMOC ON)
 
 add_executable(main main.cpp utils.cpp column.cpp visualize.cpp)

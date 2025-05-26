@@ -36,7 +36,7 @@ private:
 template <class T>
 class ListSequenceConstIterator : public IConstEnumerator<T> {
 public:
-    ListSequenceConstIterator(ListNode<T>* it) : it(it) {
+    ListSequenceConstIterator(const ListNode<T>* it) : it(it) {
     }
 
     bool IsEnd() const override {
@@ -57,7 +57,7 @@ public:
     }
 
 private:
-    ListNode<T>* it;
+    const ListNode<T>* it;
 
     int index = 0;
 };
@@ -71,6 +71,10 @@ public:
 
     ListSequence(const LinkedList<T>& l) {
         data = new LinkedList<T>(l);
+    }
+
+    ListSequence(const ListSequence<T>* l) {
+        data = new LinkedList<T>(*l->data);
     }
 
     ListSequence() {
@@ -130,7 +134,7 @@ public:
     }
 
     IConstEnumerator<T>* GetConstEnumerator() const override {
-        return new ListSequenceConstIterator<T>(data->GetBegin());
+        return new ListSequenceConstIterator<T>(data->GetConstBegin());
     }
 
 protected:

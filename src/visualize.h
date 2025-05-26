@@ -9,22 +9,25 @@ class SequenceVisualize : public QWidget {
     Q_OBJECT
 
 public:
-    SequenceVisualize(QWidget* parent = nullptr);
+    SequenceVisualize(QWidget* parent = nullptr, bool immutable = false);
 
     void Initialize(Sequence<int>* seq);
 
     virtual void VisualizeSeq() = 0;
 
-public slots:
-    void Prepend();
+    bool AskValue(int& x);
 
-    void Append();
+signals:
+    void AskedToPrepend();
+
+    void AskedToAppend();
 
 protected:
     QGraphicsScene* scene;
     QGraphicsView* view;
 
     Sequence<int>* seq;
+    const bool immutable;
 };
 
 class ArraySequenceVisualize : public SequenceVisualize {

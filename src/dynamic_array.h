@@ -67,8 +67,8 @@ public:
         return data;
     }
 
-    T* GetEnd() {
-        return data + size;
+    const T* GetConstBegin() {
+        return data;
     }
 
 private:

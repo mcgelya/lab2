@@ -37,7 +37,7 @@ bool IsNumber(const QString& s) {
     return true;
 }
 
-void SplitToSeq(const QString& line, Sequence<int>* res) {
+void SplitToMutableSeq(const QString& line, Sequence<int>* res) {
     QStringList input = line.split(' ', Qt::SkipEmptyParts);
     for (const QString& s : input) {
         if (!IsNumber(s)) {

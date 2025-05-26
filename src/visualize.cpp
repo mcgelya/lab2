@@ -8,7 +8,7 @@
 
 #include "utils.h"
 
-SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
+SequenceVisualize::SequenceVisualize(QWidget* parent, bool immutable) : QWidget(parent), immutable(immutable) {
     QHBoxLayout* layout = new QHBoxLayout(this);
 
     scene = new QGraphicsScene(this);
@@ -24,9 +24,15 @@ SequenceVisualize::SequenceVisualize(QWidget* parent) : QWidget(parent) {
 
     QPushButton* prepend = new QPushButton("+", this);
     QPushButton* append = new QPushButton("+", this);
+    if (immutable) {
+        prepend->setText("🔒");
+        prepend->setToolTip("Последовательность иммутабельная");
+        append->setText("🔒");
+        append->setToolTip("Последовательность иммутабельная");
+    }
 
-    QObject::connect(prepend, &QPushButton::clicked, this, &SequenceVisualize::Prepend);
-    QObject::connect(append, &QPushButton::clicked, this, &SequenceVisualize::Append);
+    QObject::connect(prepend, &QPushButton::clicked, this, &SequenceVisualize::AskedToPrepend);
+    QObject::connect(append, &QPushButton::clicked, this, &SequenceVisualize::AskedToAppend);
 
     layout->addWidget(prepend);
     layout->addWidget(view);
@@ -40,22 +46,10 @@ void SequenceVisualize::Initialize(Sequence<int>* v) {
     VisualizeSeq();
 }
 
-void SequenceVisualize::Prepend() {
+bool SequenceVisualize::AskValue(int& x) {
     bool ok = 1;
-    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    if (ok) {
-        seq->Prepend(x);
-        VisualizeSeq();
-    }
-}
-
-void SequenceVisualize::Append() {
-    bool ok = 1;
-    int x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    if (ok) {
-        seq->Append(x);
-        VisualizeSeq();
-    }
+    x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
+    return ok;
 }
 
 void ArraySequenceVisualize::VisualizeSeq() {
@@ -68,10 +62,12 @@ void ArraySequenceVisualize::VisualizeSeq() {
     QPen pen(utils::IsDarkTheme() ? Qt::white : Qt::black);
     QBrush brush(Qt::NoBrush);
 
-    QPen penGray(utils::IsDarkTheme() ? Qt::darkGray : Qt::lightGray);
-    for (int i = seq->GetLength(); i < seq->GetCapacity(); ++i) {
-        int x = i * boxSize;
-        scene->addRect(x, 0, boxSize, boxSize, penGray, brush);
+    if (!immutable) {
+        QPen penGray(utils::IsDarkTheme() ? Qt::darkGray : Qt::lightGray);
+        for (int i = seq->GetLength(); i < seq->GetCapacity(); ++i) {
+            int x = i * boxSize;
+            scene->addRect(x, 0, boxSize, boxSize, penGray, brush);
+        }
     }
 
     for (IConstEnumerator<int>* it = seq->GetConstEnumerator(); !it->IsEnd(); it->MoveNext()) {

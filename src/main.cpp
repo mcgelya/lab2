@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QCheckBox>
 #include <QHBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
@@ -25,9 +26,12 @@ int main(int argc, char* argv[]) {
     QLineEdit* input = new QLineEdit();
     input->setPlaceholderText("Введите последовательность...");
 
+    QCheckBox* checkImmutable = new QCheckBox("Иммутабельная");
+
     QObject::connect(arrayColumn, &Column::AskedToAdd, [=]() {
         try {
-            arrayColumn->AddArraySequence(input->text());
+            arrayColumn->AddArraySequence(input->text(), checkImmutable->isChecked());
+            checkImmutable->setChecked(false);
         } catch (const std::invalid_argument& e) {
             QMessageBox::critical(window, "Ошибка", "Вы ввели не числа.\nПожалуйста, попробуйте снова.",
                                   QMessageBox::Ok);
@@ -42,7 +46,8 @@ int main(int argc, char* argv[]) {
 
     QObject::connect(listColumn, &Column::AskedToAdd, [=]() {
         try {
-            listColumn->AddListSequence(input->text());
+            listColumn->AddListSequence(input->text(), checkImmutable->isChecked());
+            checkImmutable->setChecked(false);
         } catch (const std::invalid_argument& e) {
             QMessageBox::critical(window, "Ошибка", "Вы ввели не числа.\nПожалуйста, попробуйте снова.",
                                   QMessageBox::Ok);
@@ -56,6 +61,7 @@ int main(int argc, char* argv[]) {
     });
 
     mainLayout->addLayout(columnLayout);
+    mainLayout->addWidget(checkImmutable, 0, Qt::AlignHCenter);
     mainLayout->addWidget(input);
 
     window->setLayout(mainLayout);

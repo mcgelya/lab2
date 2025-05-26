@@ -17,13 +17,11 @@ public:
     }
 
     void MoveNext() override {
-        assert(index < size);
         ++it;
         ++index;
     }
 
     T& Dereference() override {
-        assert(index < size);
         return *it;
     }
 
@@ -40,7 +38,7 @@ private:
 template <class T>
 class ArraySequenceConstIterator : public IConstEnumerator<T> {
 public:
-    ArraySequenceConstIterator(T* it, int size) : it(it), size(size) {
+    ArraySequenceConstIterator(const T* it, int size) : it(it), size(size) {
     }
 
     bool IsEnd() const override {
@@ -48,13 +46,11 @@ public:
     }
 
     void MoveNext() override {
-        assert(index < size);
         ++it;
         ++index;
     }
 
     const T& ConstDereference() const override {
-        assert(index < size);
         return *it;
     }
 
@@ -63,7 +59,7 @@ public:
     }
 
 private:
-    T* it;
+    const T* it;
     const int size;
     int index = 0;
 };
@@ -168,7 +164,7 @@ public:
     }
 
     IConstEnumerator<T>* GetConstEnumerator() const override {
-        return new ArraySequenceConstIterator<T>(data->GetBegin(), size);
+        return new ArraySequenceConstIterator<T>(data->GetConstBegin(), size);
     }
 
 protected:
@@ -177,7 +173,6 @@ protected:
     int capacity = 1;
 
     void PushBack(const T& item) {
-        assert(size <= capacity);
         if (size == capacity) {
             data->Resize(capacity * 2);
             capacity *= 2;
@@ -187,7 +182,6 @@ protected:
     }
 
     void Insert(const T& item, int index) {
-        assert(size <= capacity);
         if (size == capacity) {
             data->Resize(capacity * 2);
             capacity *= 2;

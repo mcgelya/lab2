@@ -11,7 +11,7 @@ void ClearLayout(QLayout* layout);
 
 bool IsNumber(const QString& s);
 
-void SplitToSeq(const QString& s, Sequence<int>* res);
+void SplitToMutableSeq(const QString& s, Sequence<int>* res);
 
 bool IsDarkTheme();
 

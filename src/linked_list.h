@@ -147,6 +147,10 @@ public:
         return first;
     }
 
+    const ListNode<T>* GetConstBegin() {
+        return first;
+    }
+
 private:
     ListNode<T>* first = nullptr;
     ListNode<T>* last = nullptr;
