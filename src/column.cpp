@@ -18,12 +18,12 @@ Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
     scrollArea->setWidgetResizable(true);
     mainLayout->addWidget(scrollArea);
 
-    vectorsWidget = new QWidget(this);
-    vectorsLayout = new QVBoxLayout(vectorsWidget);
-    vectorsLayout->setSpacing(10);
-    vectorsLayout->setContentsMargins(5, 5, 5, 5);
-    vectorsWidget->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
-    scrollArea->setWidget(vectorsWidget);
+    seqsContainer = new QWidget(this);
+    seqsLayout = new QVBoxLayout(seqsContainer);
+    seqsLayout->setSpacing(10);
+    seqsLayout->setContentsMargins(5, 5, 5, 5);
+    seqsContainer->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+    scrollArea->setWidget(seqsContainer);
 
     QWidget* buttons = new QWidget(this);
     QHBoxLayout* buttonsLayout = new QHBoxLayout(buttons);
@@ -41,16 +41,16 @@ Column::Column(const QString& name, QWidget* parent) : QWidget(parent) {
 }
 
 void Column::Clear() {
-    utils::ClearLayout(vectorsLayout);
+    utils::ClearLayout(seqsLayout);
 }
 
 void Column::AddArraySequence(ArraySequence<int>* seq, bool immutable) {
-    ArraySequenceVisualize* line = new ArraySequenceVisualize(vectorsWidget, immutable);
+    ArraySequenceVisualize* line = new ArraySequenceVisualize(seqsContainer, immutable);
     line->Initialize(seq);
 
     QObject::connect(line, &SequenceVisualize::AskedToPrepend, [=, this] {
         int x;
-        bool ok = line->AskValue(x);
+        bool ok = utils::AskValue(x);
         if (!ok) {
             return;
         }
@@ -63,7 +63,7 @@ void Column::AddArraySequence(ArraySequence<int>* seq, bool immutable) {
     });
     QObject::connect(line, &SequenceVisualize::AskedToAppend, [=, this] {
         int x;
-        bool ok = line->AskValue(x);
+        bool ok = utils::AskValue(x);
         if (!ok) {
             return;
         }
@@ -75,20 +75,21 @@ void Column::AddArraySequence(ArraySequence<int>* seq, bool immutable) {
         }
     });
 
-    vectorsLayout->addWidget(line);
+    seqsLayout->addWidget(line);
 
-    vectorsWidget->adjustSize();
-    QTimer::singleShot(
-        0, this, [this]() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum()); });
+    seqsContainer->adjustSize();
+    QTimer::singleShot(0, this, [this]() {
+        scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum());
+    });
 }
 
 void Column::AddListSequence(ListSequence<int>* seq, bool immutable) {
-    ListSequenceVisualize* line = new ListSequenceVisualize(vectorsWidget, immutable);
+    ListSequenceVisualize* line = new ListSequenceVisualize(seqsContainer, immutable);
     line->Initialize(seq);
 
     QObject::connect(line, &SequenceVisualize::AskedToPrepend, [=, this] {
         int x;
-        bool ok = line->AskValue(x);
+        bool ok = utils::AskValue(x);
         if (!ok) {
             return;
         }
@@ -101,7 +102,7 @@ void Column::AddListSequence(ListSequence<int>* seq, bool immutable) {
     });
     QObject::connect(line, &SequenceVisualize::AskedToAppend, [=, this] {
         int x;
-        bool ok = line->AskValue(x);
+        bool ok = utils::AskValue(x);
         if (!ok) {
             return;
         }
@@ -113,11 +114,12 @@ void Column::AddListSequence(ListSequence<int>* seq, bool immutable) {
         }
     });
 
-    vectorsLayout->addWidget(line);
+    seqsLayout->addWidget(line);
 
-    vectorsWidget->adjustSize();
-    QTimer::singleShot(
-        0, this, [this]() { scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum()); });
+    seqsContainer->adjustSize();
+    QTimer::singleShot(0, this, [this]() {
+        scrollArea->verticalScrollBar()->setValue(scrollArea->verticalScrollBar()->maximum());
+    });
 }
 
 void Column::AddArraySequence(const QString& s, bool immutable) {

@@ -30,6 +30,6 @@ private:
     void AddListSequence(ListSequence<int>* seq, bool immutable);
 
     QScrollArea* scrollArea;
-    QWidget* vectorsWidget;
-    QVBoxLayout* vectorsLayout;
+    QWidget* seqsContainer;
+    QVBoxLayout* seqsLayout;
 };

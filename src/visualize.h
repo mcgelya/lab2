@@ -15,8 +15,6 @@ public:
 
     virtual void VisualizeSeq() = 0;
 
-    bool AskValue(int& x);
-
 signals:
     void AskedToPrepend();
 

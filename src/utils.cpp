@@ -1,6 +1,7 @@
 #include "utils.h"
 
 #include <QGuiApplication>
+#include <QInputDialog>
 #include <QStyleHints>
 #include <stdexcept>
 
@@ -20,6 +21,12 @@ void ClearLayout(QLayout* layout) {
         }
         delete item;
     }
+}
+
+bool AskValue(int& x, QWidget* parent) {
+    bool ok = 1;
+    x = QInputDialog::getInt(parent, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
+    return ok;
 }
 
 bool IsNumber(const QString& s) {

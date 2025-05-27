@@ -3,7 +3,6 @@
 #include <QGraphicsRectItem>
 #include <QGraphicsTextItem>
 #include <QHBoxLayout>
-#include <QInputDialog>
 #include <QPushButton>
 
 #include "utils.h"
@@ -44,12 +43,6 @@ SequenceVisualize::SequenceVisualize(QWidget* parent, bool immutable) : QWidget(
 void SequenceVisualize::Initialize(Sequence<int>* v) {
     seq = v;
     VisualizeSeq();
-}
-
-bool SequenceVisualize::AskValue(int& x) {
-    bool ok = 1;
-    x = QInputDialog::getInt(this, "Ввод", "Число", 1, INT_MIN, INT_MAX, 1, &ok);
-    return ok;
 }
 
 void ArraySequenceVisualize::VisualizeSeq() {
